@@ -1,16 +1,26 @@
 const API_KEY = "f442a425722641efba4308adbc89557d";
-const url = "https://api.allorigins.win/raw?url=https://newsapi.org/v2/everything?q=";
+const baseURL = "https://newsapi.org/v2/everything?q=";
+const proxyURL = "https://api.allorigins.win/get?url=";
 
 window.addEventListener("load", () => fetchNews("India"));
 
 function reload() {
     window.location.reload();
 }
+
 async function fetchNews(query) {
-    const res = await fetch(`${url}${query}&apiKey=${API_KEY}`)
+    // Encode the NewsAPI URL before passing it to AllOrigins
+    const encodedURL = encodeURIComponent(`${baseURL}${query}&apiKey=${API_KEY}`);
+
+    const res = await fetch(`${proxyURL}${encodedURL}`);
     const data = await res.json();
-    bindData(data.articles);
+
+    // AllOrigins wraps the actual response in a 'contents' field, so parse it again
+    const parsedData = JSON.parse(data.contents);
+
+    bindData(parsedData.articles);
 }
+
 
 function bindData(articles) {
     const cardsContainer = document.getElementById("cards-container");
