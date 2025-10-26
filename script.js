@@ -1,5 +1,6 @@
 const API_KEY = "f442a425722641efba4308adbc89557d";
-const url = "https://newsapi.org/v2/everything?q=";
+const url = "https://api.allorigins.win/raw?url=https://newsapi.org/v2/everything?q=";
+
 window.addEventListener("load", () => fetchNews("India"));
 
 function reload() {
