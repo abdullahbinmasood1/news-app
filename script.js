@@ -9,18 +9,13 @@ function reload() {
 }
 
 async function fetchNews(query) {
-    // Encode the NewsAPI URL before passing it to AllOrigins
     const encodedURL = encodeURIComponent(`${baseURL}${query}&apiKey=${API_KEY}`);
-
     const res = await fetch(`${proxyURL}${encodedURL}`);
     const data = await res.json();
 
-    // AllOrigins wraps the actual response in a 'contents' field, so parse it again
     const parsedData = JSON.parse(data.contents);
-
     bindData(parsedData.articles);
 }
-
 
 function bindData(articles) {
     const cardsContainer = document.getElementById("cards-container");
@@ -42,14 +37,12 @@ function fillDataInCard(cardClone, article) {
     const newsDesc = cardClone.querySelector("#news-desc");
 
     if (article.urlToImage) {
-        // If image URL starts with http://, convert to https:// or use a secure proxy
         if (article.urlToImage.startsWith("http://")) {
             newsImg.src = "https://images.weserv.nl/?url=" + article.urlToImage.replace("http://", "");
         } else {
             newsImg.src = article.urlToImage;
         }
     } else {
-        // Fallback image if none exists
         newsImg.src = "assets/no-image.jpg";
     }
 
@@ -67,6 +60,7 @@ function fillDataInCard(cardClone, article) {
 }
 
 let curSelectedNav = null;
+
 function onNavItemClick(id) {
     fetchNews(id);
     const navItem = document.getElementById(id);
